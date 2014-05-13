@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 actions :install, :download
 default_action :install
 

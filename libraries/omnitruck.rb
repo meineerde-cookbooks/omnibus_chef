@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module OmnibusChef
   # This class provides a client to the Omnitruck API
   # http://docs.opscode.com/api_omnitruck.html

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 gem_package 'chef' do
   action :purge
   not_if do

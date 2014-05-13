@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Set the version to install or a full URL to download the Omnibus package
 #
 # EITHER set the version to download and install

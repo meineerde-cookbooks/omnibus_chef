@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 name             'omnibus_chef'
 maintainer       'Holger Just'
 maintainer_email 'holger@holgerjust.de'

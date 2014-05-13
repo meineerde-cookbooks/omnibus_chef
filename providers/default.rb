@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 use_inline_resources
 
 def self.download_params

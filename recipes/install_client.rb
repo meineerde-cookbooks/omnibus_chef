@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 if platform?('debian') && Gem::Version.new(node['platform_version']) < Gem::Version.new('6.0.0')
   Chef::Log.warn 'Omnibus Chef does not support Debian 5. Doing nothing'
   return
