@@ -1,0 +1,30 @@
+AllCops:
+  Include:
+    - Gemfile
+    - Rakefile
+
+# We break that rule in metadata.rb for clarity
+SingleSpaceBeforeFirstArg:
+  Enabled: false
+
+# Default values in methods should be given with no space
+SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+# Allow reasonable method lengths
+MethodLength:
+  Max: 25
+
+# Log lines are sometimes longer
+LineLength:
+  Max: 150
+
+# Rubocop thinks a single case with multiple options is complex...
+CyclomaticComplexity:
+  Max: 10
+
+# Case indents should be relativ to the end keyword.
+# This ensures that the result of a case can be assigned to a variable
+# without having to indent the full case by the length of that variable name.
+CaseIndentation:
+  IndentWhenRelativeTo: end
