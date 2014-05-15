@@ -9,7 +9,7 @@ attribute :cache_path, :kind_of => [String], :default => Chef::Config[:file_cach
 attribute :platform, :kind_of => [String, NilClass]
 attribute :platform_version, :kind_of => [String, Numeric, NilClass]
 attribute :machine, :kind_of => [String, NilClass]
-attribute :version, :kind_of => [String], :name_attribute => true, :default => 'latest'
+attribute :version, :kind_of => [String], :default => 'latest'
 attribute :prerelease, :kind_of => [TrueClass, FalseClass], :default => false
 attribute :nightlies, :kind_of => [TrueClass, FalseClass], :default => false
 
