@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'cgi'
+
 module OmnibusChef
   # This class provides a client to the Omnitruck API
   # http://docs.opscode.com/api_omnitruck.html
@@ -18,18 +20,18 @@ module OmnibusChef
     end
 
     ARGUMENTS_MAP = {
-      platform: :p,
-      platform_version: :pv,
-      machine: :m,
-      version: :v,
-      prerelease: :prerelease,
-      nightlies: :nightlies
+      :platform => :p,
+      :platform_version => :pv,
+      :machine => :m,
+      :version => :v,
+      :prerelease => :prerelease,
+      :nightlies => :nightlies
     }
 
     private
 
     def download_url(base_url, args={})
-      args = Mash.new(url: base_url).merge(args)
+      args = Mash.new(:url => base_url).merge(args)
 
       # "latest" is an alias for no defined version
       args[:version] = nil if args[:version] == 'latest'

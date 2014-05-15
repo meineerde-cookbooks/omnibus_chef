@@ -6,4 +6,4 @@ Rubocop::RakeTask.new(:rubocop)
 require 'foodcritic'
 FoodCritic::Rake::LintTask.new
 
-task default: [:rubocop, :foodcritic]
+task :default => [:rubocop, :foodcritic]

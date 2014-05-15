@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-use_inline_resources
-
 def self.download_params
   ::OmnibusChef::Omnitruck::ARGUMENTS_MAP.keys
 end
@@ -12,59 +10,61 @@ def load_current_resource
 end
 
 action :download do
-  perform_download!
+  download = perform_download!
+
+  new_resource.updated_by_last_action(download.updated_by_last_action?)
 end
 
 action :install do
   if perform_install?
-    perform_download!
-    perform_install!
+    download = perform_download!
+    install = perform_install!
+
+    new_resource.updated_by_last_action(
+      download.updated_by_last_action? ||
+      install.updated_by_last_action?
+    )
   end
 end
 
 def perform_download!
-  omnibus_url = download_url
-  omnibus_package = download_path
+  remote_file = Chef::Resource::RemoteFile.new(download_path, run_context)
+  remote_file.source(download_url)
+  remote_file.path(download_path)
+  remote_file.mode('0644')
+  remote_file.backup(false)
+  remote_file.run_action(:create)
 
-  remote_file download_path do
-    source omnibus_url
-    path omnibus_package
-
-    backup false
-    action :create
-  end
+  remote_file
 end
 
 def perform_install?
-  if @new_resource.prevent_downgrade
+  if new_resource.prevent_downgrade
     new_version = Gem::Version.new(detect_version)
     current_version = Gem::Version.new(@current_resource.version)
 
     if new_version > current_version
-      Chef::Log.debug "#{@new_resource} Current Chef version: #{@current_resource.version}. Upgrading Chef to #{detect_version}."
+      Chef::Log.debug "#{new_resource} Current Chef version: #{@current_resource.version}. Upgrading Chef to #{detect_version}."
       true
     elsif new_version == current_version
-      Chef::Log.debug "#{@new_resource} Current Chef version: #{@current_resource.version}, same as target version."
+      Chef::Log.debug "#{new_resource} Current Chef version: #{@current_resource.version}, same as target version."
       false
     else
-      Chef::Log.debug "#{@new_resource} Current Chef version: #{@current_resource.version}. Not attempting to downgrade Chef."
+      Chef::Log.debug "#{new_resource} Current Chef version: #{@current_resource.version}. Not attempting to downgrade Chef."
       false
     end
   else
     if detect_version != @current_resource.version
-      Chef::Log.debug "#{@new_resource} Current Chef version: #{@current_resource.version}. Upgrading Chef to #{detect_version}."
+      Chef::Log.debug "#{new_resource} Current Chef version: #{@current_resource.version}. Upgrading Chef to #{detect_version}."
       true
     else
-      Chef::Log.debug "#{@new_resource} Current Chef version: #{@current_resource.version}, same as target version."
+      Chef::Log.debug "#{new_resource} Current Chef version: #{@current_resource.version}, same as target version."
       false
     end
   end
 end
 
 def perform_install!
-  omnibus_package = download_path
-  omnibus_version = detect_version
-
   package_provider = case @new_resource.platform
   when 'debian', 'ubuntu'
     Chef::Provider::Package::Dpkg
@@ -84,11 +84,13 @@ def perform_install!
     fail "Unknown platform #{platform}"
   end
 
-  package omnibus_package do
-    provider package_provider
-    source omnibus_package
-    version omnibus_version
-  end
+  package = Chef::Resource::Package.new(download_path, run_context)
+  package.provider(package_provider)
+  package.source(download_path)
+  package.version(detect_version)
+  package.run_action(:install)
+
+  package
 end
 
 private

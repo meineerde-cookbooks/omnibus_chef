@@ -3,9 +3,8 @@ AllCops:
     - Gemfile
     - Rakefile
 
-# We break that rule in metadata.rb for clarity
-SingleSpaceBeforeFirstArg:
-  Enabled: false
+HashSyntax:
+  EnforcedStyle: hash_rockets
 
 # Default values in methods should be given with no space
 SpaceAroundEqualsInParameterDefault:

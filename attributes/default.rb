@@ -14,13 +14,13 @@ default['omnibus_chef']['download_url'] = nil
 
 default['omnibus_chef']['machine'] = node['kernel']['machine']
 case
-when platform?('amazon')
+when node['platform'] == 'amazon'
   default['omnibus_chef']['platform'] = 'el'
   default['omnibus_chef']['platform_version'] = 6
-when platform?('debian')
+when node['platform'] == 'debian'
   default['omnibus_chef']['platform'] = node['platform']
   default['omnibus_chef']['platform_version'] = node['platform_version'].to_i
-when platform_family?('rhel')
+when node['platform_family'] == 'rhel'
   default['omnibus_chef']['platform'] = 'el'
   default['omnibus_chef']['platform_version'] = node['platform_version'].to_i
 else
