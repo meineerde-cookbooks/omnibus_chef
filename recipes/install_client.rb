@@ -5,9 +5,9 @@ if platform?('debian') && Gem::Version.new(node['platform_version']) < Gem::Vers
   return
 end
 
-ruby_block "delay omnibus_chef" do
+ruby_block 'delay omnibus_chef' do
   action node['omnibus_chef']['when'] == 'delayed' ? :create : :nothing
-  notifies :install, "omnibus_chef[chef]", :delayed
+  notifies :install, 'omnibus_chef[chef]', :delayed
 end
 
 ruby_block 'kill_chef_on_upgrade' do
