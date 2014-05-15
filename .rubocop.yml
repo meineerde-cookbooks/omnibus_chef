@@ -10,9 +10,13 @@ HashSyntax:
 SpaceAroundEqualsInParameterDefault:
   EnforcedStyle: no_space
 
+# They sometimes make the code short and nice
+AssignmentInCondition:
+  Enabled: false
+
 # Allow reasonable method lengths
 MethodLength:
-  Max: 25
+  Max: 35
 
 # Log lines are sometimes longer
 LineLength:

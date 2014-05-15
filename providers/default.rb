@@ -7,7 +7,7 @@ end
 action :download do
   download = perform_download!
 
-  @new_resource.updated_by_last_action(download.updated_by_last_action?)
+  new_resource.updated_by_last_action(download.updated_by_last_action?)
 end
 
 action :install do
@@ -15,7 +15,7 @@ action :install do
     download = perform_download!
     install = perform_install!
 
-    @new_resource.updated_by_last_action(
+    new_resource.updated_by_last_action(
       download.updated_by_last_action? ||
       install.updated_by_last_action?
     )
@@ -23,7 +23,7 @@ action :install do
 end
 
 def perform_download!
-  Chef::Log.info "#{@new_resource} downloading #{download_url}"
+  Chef::Log.info "#{new_resource} downloading #{download_url}"
 
   remote_file = Chef::Resource::RemoteFile.new(download_path, run_context)
   remote_file.source(download_url)
@@ -48,24 +48,24 @@ def perform_install?
     candidate[1] = candidate[1].to_i
   end
 
-  if @new_resource.prevent_downgrade
+  if new_resource.prevent_downgrade
     case candidate <=> current
     when 1
-      Chef::Log.debug "#{@new_resource} upgrade to version #{new_version}"
+      Chef::Log.debug "#{new_resource} upgrade to version #{new_version}"
       true
     when 0
-      Chef::Log.debug "#{@new_resource} is already installed - nothing to do"
+      Chef::Log.debug "#{new_resource} is already installed - nothing to do"
       false
     when -1
-      Chef::Log.debug "#{@new_resource} not attempting downgrading chef"
+      Chef::Log.debug "#{new_resource} not attempting downgrading chef"
       false
     end
   else
     if candidate != current
-      Chef::Log.debug "#{@new_resource} installing new version #{new_version}"
+      Chef::Log.debug "#{new_resource} installing new version #{new_version}"
       true
     else
-      Chef::Log.debug "#{@new_resource} is already installed - nothing to do"
+      Chef::Log.debug "#{new_resource} is already installed - nothing to do"
       false
     end
   end
@@ -92,9 +92,9 @@ def current_version
     chef_package.load_current_resource
 
     if current_version = chef_package.current_resource.version
-      Chef::Log.debug "#{@new_resource} current version is #{current_version}"
+      Chef::Log.debug "#{new_resource} current version is #{current_version}"
     else
-      Chef::Log.debug "#{@new_resource} currently not installed"
+      Chef::Log.debug "#{new_resource} currently not installed"
     end
     current_version
   end
@@ -102,43 +102,43 @@ end
 
 def new_version
   @new_version ||= begin
-    if @new_resource.version && @new_resource.version != 'latest' && !@new_resource.download_url
+    if new_resource.version && new_resource.version != 'latest' && !new_resource.download_url
       # The Omnitruck API doesn't support build versions
-      new_version = @new_resource.version.to_s.sub(/\-.*$/, '')
+      new_version = new_resource.version.to_s.sub(/\-.*$/, '')
     else
       new_version = download_url.scan(/chef_(\d+\.\d+.\d+-\d+)/).flatten.first
       fail 'Could not detect chef version from download_url' unless @new_version
     end
 
-    Chef::Log.debug "#{@new_resource} candidate version is #{new_version}"
+    Chef::Log.debug "#{new_resource} candidate version is #{new_version}"
     new_version
   end
 end
 
 def download_url
   @download_url ||= begin
-    @new_resource.download_url ||
+    new_resource.download_url ||
     ::OmnibusChef::Omnitruck.new(node).client_url(url_params)
   end
 end
 
 def download_path
-  ::File.join @new_resource.cache_path, ::File.basename(download_url)
+  ::File.join new_resource.cache_path, ::File.basename(download_url)
 end
 
 def url_params
   @url_params ||= self.class.download_params.each_with_object({}) do |param, hash|
     if param == :version
-      value = @new_resource.version == 'latest' ? '' : @new_resource.version
+      value = new_resource.version == 'latest' ? '' : new_resource.version
     else
-      value = @new_resource.send(param)
+      value = new_resource.send(param)
     end
     hash[param.to_sym] = value
   end
 end
 
 def package_provider
-  case @new_resource.platform
+  case new_resource.platform
   when 'debian', 'ubuntu'
     Chef::Provider::Package::Dpkg
   when 'el', 'suse', 'sles'
