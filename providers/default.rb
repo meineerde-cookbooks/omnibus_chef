@@ -36,6 +36,11 @@ def perform_download!
 end
 
 def perform_install?
+  if current_version.nil?
+    Chef::Log.debug "#{new_resource} installing version #{new_version}"
+    return true
+  end
+
   current = current_version.split('-', 2)
   current[0] = Gem::Version.new(current[0])
   current[1] = current[1].to_i

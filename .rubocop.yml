@@ -14,9 +14,10 @@ SpaceAroundEqualsInParameterDefault:
 AssignmentInCondition:
   Enabled: false
 
-# Allow reasonable method lengths
+# Allow longer methods. Due to heavy logging, these can become longer, even
+# if they don't actually do much
 MethodLength:
-  Max: 35
+  Max: 50
 
 # Log lines are sometimes longer
 LineLength:
