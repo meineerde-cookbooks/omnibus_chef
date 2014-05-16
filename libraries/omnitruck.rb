@@ -12,11 +12,11 @@ module OmnibusChef
     end
 
     def client_url(args={})
-      download_url('https://www.getchef.com/chef/download', args)
+      download_url("#{base_url}/download", args)
     end
 
     def server_url(args={})
-      download_url('https://www.getchef.com/chef/download-server', args)
+      download_url("#{base_url}/download-server", args)
     end
 
     ARGUMENTS_MAP = {
@@ -29,6 +29,14 @@ module OmnibusChef
     }
 
     private
+
+    def base_url
+      if ['omnibus_chef']['use_https']
+        'https://www.getchef.com/chef'
+      else
+        'http://www.getchef.com/chef'
+      end
+    end
 
     def download_url(base_url, args={})
       args = Mash.new(:url => base_url).merge(args)

@@ -130,6 +130,18 @@ You can override any of these attributes
     </td>
   </tr>
   <tr>
+    <td><code>use_https</code></td>
+    <td><code>true</code></td>
+    <td>
+      Set to <code>true</code> to contact the Omnitruck API via https. This
+      ensures that all information with the API (including the download of the
+      package to be installed) is retreived via https.
+
+      You should generally keep this enabled unless there is a need to
+      intercept the communication (e.g. with a transparent proxy).
+    </td>
+  </tr>
+  <tr>
     <td><code>prevent_downgrade</code></td>
     <td><code>false</code></td>
     <td>

@@ -28,6 +28,10 @@ else
   default['omnibus_chef']['platform_version'] = node['platform_version']
 end
 
+# If true, we contact the omnitruck API via https. It should give us back
+# a https download URL. We can thus be a bit more secure from tampering.
+default['omnibus_chef']['use_https'] = true
+
 # Set to true to prevent the installation of a lower version than is
 # currently installed.
 default['omnibus_chef']['prevent_downgrade'] = false
