@@ -31,7 +31,7 @@ module OmnibusChef
     private
 
     def base_url
-      if ['omnibus_chef']['use_https']
+      if node['omnibus_chef']['use_https']
         'https://www.getchef.com/chef'
       else
         'http://www.getchef.com/chef'
