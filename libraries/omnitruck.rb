@@ -32,9 +32,9 @@ module OmnibusChef
 
     def base_url
       if node['omnibus_chef']['use_https']
-        'https://www.getchef.com/chef'
+        'https://www.chef.io/chef'
       else
-        'http://www.getchef.com/chef'
+        'http://www.chef.io/chef'
       end
     end
 
